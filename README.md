@@ -1,24 +1,25 @@
-🧬 Single-Nucleus DNA Methylation Analysis (snmC-seq2) — Human Brain
+#🧬 Single-Nucleus DNA Methylation Analysis (snmC-seq2) — Human Brain
 
-Overview
+#Overview
+
 Single-nucleus methylcytosine sequencing 2 (snmC-seq2) is a high-throughput technique for profiling DNA methylation at single-cell resolution using isolated nuclei. This approach has been particularly transformative for studying the human brain, where frozen tissue is more readily available than fresh samples, and where the complexity of cell types requires single-cell resolution analysis.
 
-Why Single-Nucleus Approach for Brain?
+#Why Single-Nucleus Approach for Brain?
 
-Advantages Over Single-Cell Methods
+#Advantages Over Single-Cell Methods
   1. Compatible with frozen tissue: Works with post-mortem brain samples and biobanked specimens
   2. No cell dissociation artifacts: Avoids stress responses from enzymatic dissociation
   3. Captures all cell types: Includes fragile neurons that are difficult to isolate intact
   4. Preserves nuclear architecture: Maintains chromatin context better than whole-cell methods
   5. Higher throughput: Can process thousands of nuclei in a single experiment
 
-Brain-Specific Challenges Addressed
+#Brain-Specific Challenges Addressed
   1. Cellular heterogeneity: The brain contains hundreds of distinct cell types
   2. Rare cell populations: Specific neuronal subtypes may represent <1% of total cells
   3. Post-mortem samples: Most human brain tissue is only available frozen
   4. Limited biopsy material: Human brain samples are precious and limited
 
-The goal of this project is not discovery, but correct learning:
+#The goal of this project is not discovery, but correct learning:
 
   - how bisulfite methylation data behaves,
   - how to process it properly,
@@ -27,7 +28,7 @@ The goal of this project is not discovery, but correct learning:
 This repository is intended as a reference-quality learning artifact for epigenomics and bioinformatics.
 
 
-Dataset
+#Dataset
   - SRA Run: SRR13898339
   - Organism: Homo sapiens
   - Tissue: Human brain (cortex)
@@ -38,7 +39,7 @@ Dataset
 ⚠️ Important: This dataset is bisulfite sequencing data, not WGS or RNA-seq. It is not suitable for variant calling, CNV analysis, or standard genomic workflows.
 
 
-Project Objectives
+#Project Objectives
   1. Learn how bisulfite sequencing data differs from standard DNA sequencing
   2. Apply assay-appropriate QC and alignment
   3. Distinguish diagnostic outputs from biological outputs
@@ -46,7 +47,7 @@ Project Objectives
   5. Understand single-nucleus coverage artifacts and how to handle them
 
 
-Software Requirements
+#Software Requirements
   1. seqkit - FASTQ statistics ( To know the size of genome, read length, min and max read length)
   2. fastqc - Raw read quality assessment
   3. multiqc - Aggregated QC reports
@@ -57,7 +58,7 @@ Software Requirements
   8. awk - Text processing for methylation quantification
 
 
-Workflow
+#Workflow
 
 1. Data Download & Inspection
   - Paired-end FASTQ files were downloaded from SRA using prefetch command
@@ -68,7 +69,7 @@ Terminal Execution
 seqkit stats SRR13898339_1.fastq.gz SRR13898339_2.fastq.gz
 
 
-Observation
+#Observation
 
   1.  ~1.1 million read pairs
   2.  ~150 bp reads
@@ -517,3 +518,10 @@ Interpretation
   - Confirms real brain epigenetic signal
 
 Critical: Apply ≥5× coverage threshold to avoid sampling artifacts.
+
+
+## Documentation
+
+- 📊 **Results**: see [RESULTS.md](RESULTS.md)
+- 🔑 **Key Findings**: see [KEY_FINDINGS.md](KEY_FINDINGS.md)
+- 🎯 **Project Scope**: see [PROJECT_SCOPE.md](PROJECT_SCOPE.md)
