@@ -1,0 +1,28 @@
+# Raw sequencing data
+*.fastq.gz
+*.fq.gz
+*.sra
+
+# Alignment & methylation outputs
+*.bam
+*.bam.bai
+*.bedGraph.gz
+*.cov.gz
+*.txt
+
+# QC reports
+fastp.html
+fastp.json
+fqresult/
+
+# Reference genome
+hg38/
+
+# Bismark temp / reports
+*_bismark*
+*_splitting_report.txt
+*_report.txt
+*M-bias*
+
+# Directories with large files
+bs3
