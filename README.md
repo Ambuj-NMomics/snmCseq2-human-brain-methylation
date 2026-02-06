@@ -1,25 +1,53 @@
-#🧬 Single-Nucleus DNA Methylation Analysis (snmC-seq2) — Human Brain
+# 🧬 Single-Nucleus DNA Methylation Analysis (snmC-seq2) — Human Brain
 
-#Overview
+**Overview**
 
 Single-nucleus methylcytosine sequencing 2 (snmC-seq2) is a high-throughput technique for profiling DNA methylation at single-cell resolution using isolated nuclei. This approach has been particularly transformative for studying the human brain, where frozen tissue is more readily available than fresh samples, and where the complexity of cell types requires single-cell resolution analysis.
+ 
+# Why Single-Nucleus Approach for Brain?
+The brain is not a homogeneous tissue - it contains dozens of distinct cell types with dramatically different methylation profiles:
 
-#Why Single-Nucleus Approach for Brain?
+# Cell Type Heterogeneity:
+Cell Type               DNA Methylation Profile                   Non-CpG (mCH) Level
+Excitatory neurons      High mCG, high mCH                        ~3-5% globally
+Inhibitory neuronsHigh  mCG, high mCH                             ~2-4% globally
+AstrocytesHigh          mCG, low mCH                              ~0.5% globally
+OligodendrocytesHigh    mCG, very low mCH                         ~0.2% globally
+MicrogliaModerate       mCG, very low mCH                         ~0.1% globally
 
-#Advantages Over Single-Cell Methods
+# Why Bulk WGBS Fails for Brain:
+Bulk whole-genome bisulfite sequencing (WGBS) averages methylation across millions of cells:
+
+Bulk WGBS measurement = (60% neurons × 4% mCH) + (40% glia × 0.3% mCH)
+                      = 2.4% + 0.12% = ~2.5% mCH
+
+** Problems with this approach **
+❌ Cannot identify cell-type-specific methylation patterns
+❌ Obscures neuronal mCH signal (diluted by glia)
+❌ Cannot study rare cell populations (<5% of tissue)
+❌ Loses spatial and functional resolution
+
+
+** Why Single-Nucleus snmC-seq2 Succeeds: **
+Single-nucleus methylation sequencing measures each cell individually:
+  ✅ Preserves cell-type identity - Can cluster cells by methylation profile
+  ✅ Detects rare cell types - Even 1% of total cells are measurable
+  ✅ Reveals cell-type-specific gene regulation - Methylation differences between neuron subtypes
+  ✅ Enables disease studies - Compare diseased vs healthy neurons specifically
+# Advantages Over Single-Cell Methods
   1. Compatible with frozen tissue: Works with post-mortem brain samples and biobanked specimens
   2. No cell dissociation artifacts: Avoids stress responses from enzymatic dissociation
   3. Captures all cell types: Includes fragile neurons that are difficult to isolate intact
   4. Preserves nuclear architecture: Maintains chromatin context better than whole-cell methods
   5. Higher throughput: Can process thousands of nuclei in a single experiment
 
-#Brain-Specific Challenges Addressed
+# Brain-Specific Challenges Addressed
   1. Cellular heterogeneity: The brain contains hundreds of distinct cell types
   2. Rare cell populations: Specific neuronal subtypes may represent <1% of total cells
   3. Post-mortem samples: Most human brain tissue is only available frozen
   4. Limited biopsy material: Human brain samples are precious and limited
 
-#The goal of this project is not discovery, but correct learning:
+# The goal of this project is not discovery, but correct learning:
 
   - how bisulfite methylation data behaves,
   - how to process it properly,
@@ -28,7 +56,7 @@ Single-nucleus methylcytosine sequencing 2 (snmC-seq2) is a high-throughput tech
 This repository is intended as a reference-quality learning artifact for epigenomics and bioinformatics.
 
 
-#Dataset
+# Dataset
   - SRA Run: SRR13898339
   - Organism: Homo sapiens
   - Tissue: Human brain (cortex)
@@ -39,7 +67,7 @@ This repository is intended as a reference-quality learning artifact for epigeno
 ⚠️ Important: This dataset is bisulfite sequencing data, not WGS or RNA-seq. It is not suitable for variant calling, CNV analysis, or standard genomic workflows.
 
 
-#Project Objectives
+# Project Objectives
   1. Learn how bisulfite sequencing data differs from standard DNA sequencing
   2. Apply assay-appropriate QC and alignment
   3. Distinguish diagnostic outputs from biological outputs
@@ -47,7 +75,7 @@ This repository is intended as a reference-quality learning artifact for epigeno
   5. Understand single-nucleus coverage artifacts and how to handle them
 
 
-#Software Requirements
+# Software Requirements
   1. seqkit - FASTQ statistics ( To know the size of genome, read length, min and max read length)
   2. fastqc - Raw read quality assessment
   3. multiqc - Aggregated QC reports
@@ -69,8 +97,7 @@ Terminal Execution
 seqkit stats SRR13898339_1.fastq.gz SRR13898339_2.fastq.gz
 
 
-#Observation
-
+**Observation**
   1.  ~1.1 million read pairs
   2.  ~150 bp reads
   3.  Data volume consistent with single-nucleus, not bulk WGBS
@@ -79,12 +106,14 @@ seqkit stats SRR13898339_1.fastq.gz SRR13898339_2.fastq.gz
 2. Raw Read Quality Control (QC)
 
 # Run FastQC on both paired-end files
+
 fastqc SRR13898339_1.fastq.gz SRR13898339_2.fastq.gz
 
 # Aggregate QC reports into a single interactive HTML
+
 multiqc .
 
-Understanding FastQC Reports for Bisulfite Data:
+** Understanding FastQC Reports for Bisulfite Data:** 
 
 Bisulfite sequencing chemically converts unmethylated cytosines (C) to uracils (U), which are read as thymines (T) during sequencing. This creates expected artifacts that would be errors in normal sequencing:
 
@@ -92,7 +121,7 @@ Expected "Warnings" in MultiQC Report (These are NORMAL):
 
 When you open the MultiQC HTML report, you'll see the Status Checks section showing colored boxes for each FastQC module. 
 
-What the MultiQC Report Will Look Like:
+# What the MultiQC Report Will Look Like:
 
 In the Status Checks heatmap, you'll see:
   - 🔴 Red boxes for: Per base sequence content, Sequence duplication levels
@@ -101,19 +130,19 @@ In the Status Checks heatmap, you'll see:
 
 This pattern of mostly red and orange warnings is completely normal for bisulfite sequencing and does not indicate poor data quality. The red boxes reflect the expected biochemical changes from bisulfite treatment, not sequencing errors.
 
-Key Metrics to Check:
+# Key Metrics to Check:
   - General Statistics table - Look for ~1M reads per file (typical for single-nucleus)
   - Sequence Quality Histograms - Should show high quality (Phred >30) across most of the read
   - Per Base Sequence Content plot - Click on a sample to see the line plot. You'll see T% is elevated and C% is reduced (the bisulfite signature)
 
-Actual Problems to Look For:
+**Actual Problems to Look For:**
   ✅ Per base sequence quality - Should be >30 (green) for most of the read
   ✅ Per base N content - Should be near zero
   ✅ Sequence length distribution - Should match expected read length (~150bp)
   ✅ Adapter content - High adapter contamination needs trimming (handled in step 3)
 
 
-What This Means:
+** What This Means:**
 
 If FastQC shows red "FAIL" flags for sequence composition, GC content, or kmer content, this is normal for bisulfite data. Do not attempt to "fix" these by aggressive filtering. The biochemistry of the assay creates these patterns.
 However, if you see poor base quality scores (phred <20) or very high N content, this indicates a real sequencing quality problem.
